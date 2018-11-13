@@ -1,27 +1,7 @@
 import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, scan, catchError, finalize } from 'rxjs/operators';
-
-class SuperDataSourceCache<T> {
-  marked: boolean;
-  entity: T;
-}
-
-export interface ISuperDataSourceService<T, TContext> {
-  getData(
-    filterString: string,
-    sortDirection: string,
-    pageIndex: number,
-    pageSize: number,
-    context?: TContext
-  ): Observable<T[]>;
-}
-
-export class SuperDataSourceOptions<T, TContext> {
-  keyProperty = 'key';
-  dataService?: ISuperDataSourceService<T, TContext>;
-  data?: T[];
-}
+import { SuperDataSourceOptions } from './SuperDataSourceOptions';
 
 export class SuperDataSource<T, TContext = any> implements DataSource<T> {
   private dataSubject = new BehaviorSubject<T[]>([]);
@@ -85,4 +65,9 @@ export class SuperDataSource<T, TContext = any> implements DataSource<T> {
   unMark(entity: T) {
     this.dataCacheSubject.next([{ entity: entity, marked: false }]);
   }
+}
+
+class SuperDataSourceCache<T> {
+  marked: boolean;
+  entity: T;
 }

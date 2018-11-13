@@ -1,12 +1,12 @@
 <mat-card>
-  <mat-table>
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-
-    <ng-container matColumnDef="duration">
-      <div *matHeaderCellDef>Duration</div>
-      <div class="duration-cell"
-        *matCellDef="let lesson">{{lesson.duration}}</div>
+  <mat-table [dataSource]="dataSource">
+    <mat-header-row *matHeaderRowDef="['one', 'two']"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: ['one', 'two']"></mat-row>
+    <ng-container *ngFor="let columnDef of columns"
+      matColumnDef="{{columnDef.name}}">
+      <div *matHeaderCellDef>{{columnDef.name}}</div>
+      <div [ngClass]="columnDef.styles"
+        *matCellDef="let column">{{column[columnDef.displayProperty]}}</div>
     </ng-container>
 
   </mat-table>
