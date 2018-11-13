@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-table>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+    <ng-container matColumnDef="duration">
+      <div *matHeaderCellDef>Duration</div>
+      <div class="duration-cell"
+        *matCellDef="let lesson">{{lesson.duration}}</div>
+    </ng-container>
+
+  </mat-table>
+  <mat-paginator [hidePageSize]="true"
+    [pageSize]="20"></mat-paginator>
+</mat-card>
