@@ -2,11 +2,15 @@ import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, scan, catchError, finalize } from 'rxjs/operators';
 import { SuperDataSourceOptions } from './SuperDataSourceOptions';
+import { SuperTableResult } from './SuperTableResult';
 
 export class SuperDataSource<T, TContext = any> implements DataSource<T> {
   private dataSubject = new BehaviorSubject<T[]>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
   public loading$ = this.loadingSubject.asObservable();
+
+  private totalSubject = new BehaviorSubject<number>(0);
+  public total$ = this.totalSubject.asObservable();
 
   private dataCacheSubject = new BehaviorSubject<SuperDataSourceCache<T>[]>([]);
   private dataCache$ = this.dataCacheSubject.asObservable().pipe(
@@ -51,10 +55,13 @@ export class SuperDataSource<T, TContext = any> implements DataSource<T> {
       this.options.dataService
         .getData(filterString, sortDirection, pageIndex, pageSize, context)
         .pipe(
-          catchError(() => of([])),
+          catchError(() => of(new SuperTableResult<T>())),
           finalize(() => this.loadingSubject.next(false))
         )
-        .subscribe(data => this.dataSubject.next(data));
+        .subscribe(result => {
+          this.totalSubject.next(result.total);
+          this.dataSubject.next(result.data || []);
+        });
     }
   }
 

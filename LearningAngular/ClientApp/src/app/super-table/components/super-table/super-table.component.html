@@ -1,15 +1,65 @@
-<mat-card>
-  <mat-table [dataSource]="dataSource">
-    <mat-header-row *matHeaderRowDef="['one', 'two']"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: ['one', 'two']"></mat-row>
-    <ng-container *ngFor="let columnDef of columns"
-      matColumnDef="{{columnDef.name}}">
-      <div *matHeaderCellDef>{{columnDef.name}}</div>
-      <div [ngClass]="columnDef.styles"
-        *matCellDef="let column">{{column[columnDef.displayProperty]}}</div>
+<mat-form-field [floatLabel]="'never'">
+  <input matInput
+    [formControl]="filter"
+    #input
+    placeholder="Filter">
+</mat-form-field>
+<div class="mat-elevation-z8 table-container">
+  <mat-toolbar [ngClass]="{'mat-primary': !selection.hasValue(), 'mat-default': selection.hasValue()}">
+    <mat-toolbar-row>
+      <h3 *ngIf="selection?.selected?.length > 0">({{selection?.selected?.length}}) Selected</h3>
+      <h3 *ngIf="selection?.selected?.length == 0">Name Table</h3>
+      <div fxFlex></div>
+      <button mat-icon-button
+        *ngIf="selection?.selected.length > 0">
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+      <!-- <button mat-icon-button
+        *ngIf="selection?.selected.length > 0">
+        <mat-icon>menu</mat-icon>
+      </button> -->
+      <button mat-icon-button
+        *ngIf="selection?.selected.length > 0">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </mat-toolbar-row>
+
+    <!-- </mat-toolbar-row> -->
+  </mat-toolbar>
+  <mat-table [dataSource]="dataSource"
+    #matTable>
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef
+        style="max-width: 50px">
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
+      </mat-header-cell>
+
+      <mat-cell *matCellDef="let column"
+        style="max-width: 50px">
+        <mat-checkbox (change)="$event ? selection.toggle(column) : null"
+          [checked]="selection.isSelected(column)"></mat-checkbox>
+      </mat-cell>
     </ng-container>
 
+    <ng-container matColumnDef="{{columnDef.name}}"
+      *ngFor="let columnDef of columns; let first = first">
+      <mat-header-cell *matHeaderCellDef>
+        {{ columnDef.name }}
+      </mat-header-cell>
+      <mat-cell *matCellDef="let column">
+        {{ column[columnDef.displayProperty] }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="(_columnDef$ | async); sticky: true"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: (_columnDef$ | async)"
+      (click)="rowClick(row); selection.toggle(row)"></mat-row>
   </mat-table>
+  <!-- Total: {{dataSource?.total$ | async}} -->
   <mat-paginator [hidePageSize]="true"
-    [pageSize]="20"></mat-paginator>
-</mat-card>
+    [hidden]="true"
+    [pageSize]="25"
+    [length]="dataSource.total$ | async"></mat-paginator>
+</div>

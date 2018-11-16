@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs/observable';
+import { SuperTableResult } from './SuperTableResult';
 
 export interface ISuperDataSourceService<T, TContext> {
   getData(
@@ -7,5 +8,5 @@ export interface ISuperDataSourceService<T, TContext> {
     pageIndex: number,
     pageSize: number,
     context?: TContext
-  ): Observable<T[]>;
+  ): Observable<SuperTableResult<T>>;
 }

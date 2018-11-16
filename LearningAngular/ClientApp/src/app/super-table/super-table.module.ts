@@ -8,18 +8,40 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {
   MatTableModule,
   MatPaginatorModule,
-  MatCardModule
+  MatCardModule,
+  MatCheckboxModule,
+  MatToolbarModule,
+  MatSortModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatIconModule,
+  MatButtonModule
 } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SuperTableActionsBarComponent } from './components/super-table-actions-bar/super-table-actions-bar.component';
 
 @NgModule({
-  declarations: [SuperTableComponent, SuperTableExampleComponent],
+  declarations: [
+    SuperTableComponent,
+    SuperTableExampleComponent,
+    SuperTableActionsBarComponent
+  ],
   imports: [
     CommonModule,
     SuperTableRoutingModule,
     FlexLayoutModule,
     MatTableModule,
     MatPaginatorModule,
-    MatCardModule
+    MatCardModule,
+    MatCheckboxModule,
+    MatToolbarModule,
+    MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    FlexLayoutModule,
+    MatIconModule,
+    MatButtonModule
   ]
 })
 export class SuperTableModule {}

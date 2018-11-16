@@ -29,6 +29,7 @@
     "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "aspnet-prerendering": "^3.0.1",
     "core-js": "^2.5.7",
+    "material-icons": "^0.2.3",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.0.0-rc.0",
     "zone.js": "^0.8.26"
